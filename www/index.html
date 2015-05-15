@@ -8,9 +8,8 @@
 
 </head>
 
-<body ng-app="getLostApp">
-
-  <md-content>
+<body ng-app="getLostApp" >
+  <md-content ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
         <md-button class="md-icon-button" aria-label="Settings">
@@ -56,24 +55,19 @@
             <md-button class="md-raised md-primary" ng-click="submit()">Search for destinations!</md-button>
           </div>
 
-          <md-content>
-            <md-toolbar ng-show="error" class="md-warn md-padding">
-              Error: {{error}}
-            </md-toolbar>
             <md-content ng-show="fareinfo">
               <md-list>
                 <md-subheader class="md-no-sticky">Results</md-subheader>
-                <md-list-item class="md-3-line" ng-repeat="item in fareinfo">
+                <md-list-item class="md-3-line" ng-repeat="item in fareinfo | orderBy:'LowestFare'">
                   <div class="md-list-item-text">
-                    <h3>{{ item.DestinationLocation }}</h3>
-                    <h4>{{ item.DepartureDateTime }}</h4>
-                    <p>{{ item.LowestNonStopFare }}</p>
+                    <h3>Destination: {{ item.DestinationLocation }}</h3>
+                    <h4>Lowest fare: $ {{ item.LowestFare }}</h4>
+                    <p>Lowest non-stop fare: $ {{ item.LowestNonStopFare }}</p>
                   </div>
                   <md-divider></md-divider>
                 </md-list-item>
               </md-list>
             </md-content>
-          </md-content>
         </md-card-content>
       </md-card>
       <div flex="20"></div>

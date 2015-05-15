@@ -1,5 +1,5 @@
 angular.module('getLostApp', ['ngMaterial']).
-controller('MainCtrl', function($rootScope, $scope, $http, $timeout, $q, $log) {
+controller('MainCtrl', function($rootScope, $scope, $mdToast, $animate, $http, $timeout, $q, $log) {
 
   $scope.cities = $scope.cities || [];
   var self = this;
@@ -109,12 +109,16 @@ controller('MainCtrl', function($rootScope, $scope, $http, $timeout, $q, $log) {
         if ($scope.results.status) {
           $scope.fareinfo = JSON.parse($scope.data).FareInfo;
           console.log($scope.fareinfo);
+          $scope.showSimpleToast("Successfully got flight info");
         } else {
           $scope.error = JSON.parse($scope.data.data).message;
+          $scope.showSimpleToast("Error: " + $scope.error + ". Try again!");
         }
     }).error(function(err) {
       console.log(err);
       $scope.error = JSON.parse(err.data).message;
+      $scope.showSimpleToast("Error: " + $scope.error + ". Try again!");
+
     });
   };
 
@@ -133,4 +137,26 @@ controller('MainCtrl', function($rootScope, $scope, $http, $timeout, $q, $log) {
 
     return [year, month, day].join('-');
   }
+
+  $scope.toastPosition = {
+    bottom: false,
+    top: true,
+    left: false,
+    right: true,
+    fit: true
+  };
+  $scope.getToastPosition = function() {
+    return Object.keys($scope.toastPosition)
+      .filter(function(pos) { return $scope.toastPosition[pos]; })
+      .join(' ');
+  };
+
+  $scope.showSimpleToast = function(msg) {
+    $mdToast.show(
+      $mdToast.simple()
+        .content(msg)
+        .position($scope.getToastPosition())
+        .hideDelay(3000)
+    );
+  };
 });
