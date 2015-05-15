@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <title>Get Lost</title>
   <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css">
-
 </head>
 
-<body ng-app="getLostApp" >
-  <md-content ng-cloak>
+<body ng-app="getLostApp" ng-cloak>
+  <md-content>
+    <!-- The top toolbar -->
     <md-toolbar>
       <div class="md-toolbar-tools">
         <md-button class="md-icon-button" aria-label="Settings">
@@ -21,12 +21,23 @@
       </div>
     </md-toolbar>
 
+
+    <!-- The content area -->
     <div layout="row">
+      <!-- 20% padding to the left -->
       <div flex="20"></div>
+
+      <!-- The main action happens here -->
       <md-card flex ng-controller="MainCtrl as ctrl">
         <md-card-content>
-          <md-autocomplete ng-disabled="ctrl.isDisabled" md-no-cache="ctrl.noCache" md-selected-item="ctrl.selectedItem" md-search-text-change="ctrl.searchTextChange(ctrl.searchText)" md-search-text="ctrl.searchText" md-selected-item-change="ctrl.selectedItemChange(item)"
-          md-items="item in ctrl.querySearch(ctrl.searchText)" md-item-text="item.display" md-min-length="0" placeholder="Where are you flying from?">
+          <!-- The row for the city select autocomplete list -->
+          <md-content>
+          <md-autocomplete  md-selected-item="ctrl.selectedItem"
+            md-search-text="ctrl.searchText"
+            md-items="item in ctrl.querySearch(ctrl.searchText)"
+            md-item-text="item.display"
+            md-min-length="0"
+            placeholder="Where are you flying from?">
             <md-item-template>
               <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
             </md-item-template>
@@ -34,6 +45,12 @@
               No matches found for "{{ctrl.searchText}}".
             </md-not-found>
           </md-autocomplete>
+          <md-tooltip>
+              Pick the city you want to start from!
+          </md-tooltip>
+          <p class="md-caption">NYC, CHI and LON work well</p>
+          </md-content>
+          <!-- The row for the budget and dates -->
           <div layout>
             <md-input-container flex>
               <md-select placeholder="Set your budget" ng-model="info.maxfare">
@@ -51,25 +68,30 @@
               <input type="date" ng-model="info.returndate">
             </md-input-container>
           </div>
+
+          <!-- The submit button -->
           <div layout>
             <md-button class="md-raised md-primary" ng-click="submit()">Search for destinations!</md-button>
           </div>
 
-            <md-content ng-show="fareinfo">
-              <md-list>
-                <md-subheader class="md-no-sticky">Results</md-subheader>
-                <md-list-item class="md-3-line" ng-repeat="item in fareinfo | orderBy:'LowestFare'">
-                  <div class="md-list-item-text">
-                    <h3>Destination: {{ item.DestinationLocation }}</h3>
-                    <h4>Lowest fare: $ {{ item.LowestFare }}</h4>
-                    <p>Lowest non-stop fare: $ {{ item.LowestNonStopFare }}</p>
-                  </div>
-                  <md-divider></md-divider>
-                </md-list-item>
-              </md-list>
-            </md-content>
+          <!-- The results -->
+          <md-content ng-show="fareinfo">
+            <md-list>
+              <md-subheader class="md-no-sticky">Results</md-subheader>
+              <md-list-item class="md-3-line" ng-repeat="item in fareinfo | orderBy:'LowestFare'">
+                <div class="md-list-item-text">
+                  <h3>Destination: {{ item.DestinationLocation }}</h3>
+                  <h4>Lowest fare: $ {{ item.LowestFare }}</h4>
+                  <p>Lowest non-stop fare: $ {{ item.LowestNonStopFare }}</p>
+                </div>
+                <md-divider></md-divider>
+              </md-list-item>
+            </md-list>
+          </md-content>
         </md-card-content>
       </md-card>
+
+      <!-- 20% padding to the right -->
       <div flex="20"></div>
     </div>
   </md-content>
