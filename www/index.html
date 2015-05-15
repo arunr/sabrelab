@@ -4,93 +4,74 @@
 <head>
   <meta charset="UTF-8">
   <title>Get Lost</title>
-  <link rel="stylesheet" href="bower_components/lumx/dist/lumx.css">
-  <link rel="stylesheet" href="bower_components/mdi/materialdesignicons.css">
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+  <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css">
+
 </head>
 
 <body ng-app="getLostApp">
-  <div class="p+">
-    <span class="fs-display-3 display-block">Get Lost</span>
-    <span class="fs-title display-block">goofing around with @appa</span>
-  </div>
-  <div ng-controller="MainCtrl">
-    <div class="mt++" flex-container="row" flex-gutter="24">
 
-      <div flex-item>
-        <lx-select ng-model="info.origin" placeholder="Starting airport" choices="cities" floating-label>
-          <lx-select-selected>
-            {{ $selected.name }} - {{ $selected.code }}
-          </lx-select-selected>
-
-          <lx-select-choices>
-            {{ $choice.name }} - {{ $choice.code }}
-          </lx-select-choices>
-        </lx-select>
+  <md-content>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" aria-label="Settings">
+          <md-icon md-svg-icon="./bower_components/material-design-icons/maps/svg/design/ic_local_airport_24px.svg"></md-icon>
+        </md-button>
+        <h2>
+          <span class="md-title">Get Lost!</span>
+        </h2>
       </div>
+    </md-toolbar>
 
-      <div flex-item>
-        <lx-select ng-model="info.maxfare" placeholder="Budget" choices="prices" floating-label>
-          <lx-select-selected>
-            {{ $selected.show }}
-          </lx-select-selected>
-
-          <lx-select-choices>
-            {{ $choice.show }}
-          </lx-select-choices>
-        </lx-select>
-      </div>
-
-    </div>
-    <div class="mt++" flex-container="row" flex-gutter="24">
-      <div flex-item>
-        <form>
-          <lx-date-picker model="info.departuredate" label="Start date" locale="en" fixed-label="true" icon="calendar"></lx-date-picker>
-
-        </form>
-      </div>
-      <div flex-item>
-        <form>
-          <lx-date-picker model="info.returndate" label="End date" locale="en" fixed-label="true" icon="calendar"></lx-date-picker>
-        </form>
-      </div>
-    </div>
-    <div class="mt++" flex-container="row" flex-gutter="24">
-      <div flex-item>
-        <div flex-container="column" flex-align="space-between center">
-          <button class="btn btn--m btn--blue btn--raised" lx-ripple ng-click="submit()">Submit</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt++" flex-container="row" flex-gutter="24" flex-wrap ng-show="results">
-      <div ng-show="results.status" class="p++">
-        <div flex-item="6">
-          <span class="fs-title display-block mb">Places you can go...</span>
-          <div class="divider divider--dark"></div>
-          <ul class="list mt++">
-            <div ng-repeat="d in fareinfo | orderBy: 'LowestFare'">
-              <li class="list-row list-row--has-separator">
-                <div class="list-row__content">
-                  <span>{{d.LowestFare}}, {{d.DestinationLocation}}</span>
+    <div layout="row">
+      <div flex="20"></div>
+      <md-card flex ng-controller="MainCtrl as ctrl">
+        <md-card-content>
+          <md-autocomplete ng-disabled="ctrl.isDisabled" md-no-cache="ctrl.noCache" md-selected-item="ctrl.selectedItem" md-search-text-change="ctrl.searchTextChange(ctrl.searchText)" md-search-text="ctrl.searchText" md-selected-item-change="ctrl.selectedItemChange(item)"
+          md-items="item in ctrl.querySearch(ctrl.searchText)" md-item-text="item.display" md-min-length="0" placeholder="Where are you flying from?">
+            <md-item-template>
+              <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+            </md-item-template>
+            <md-not-found>
+              No matches found for "{{ctrl.searchText}}".
+            </md-not-found>
+          </md-autocomplete>
+          <div layout>
+            <md-input-container flex>
+              <md-select placeholder="Set your budget" ng-model="info.maxfare">
+                <div ng-repeat="p in prices">
+                  <md-option value="{{p.value}}">{{p.show}}</md-option>
                 </div>
-              </li>
-            </div>
-          </ul>
-        </div>
-      </div>
+              </md-select>
+            </md-input-container>
+            <md-input-container flex>
+              <label>Start date</label>
+              <input type="date" ng-model="info.departuredate">
+            </md-input-container>
+            <md-input-container flex>
+              <label>End date</label>
+              <input type="date" ng-model="info.returndate">
+            </md-input-container>
+          </div>
+          <div layout>
+            <md-button class="md-raised md-primary" ng-click="submit()">Search for destinations!</md-button>
+          </div>
 
-      <div ng-hide="results.status" class="p++">
-        <h2>Error</h2>
-        {{error}}
-      </div>
+          <md-card flex>
+            <md-card-content>
+            {{error}}
+            {{fareinfo}}
+          </md-card-content>
+          </md-card>
+    </md-card-content>
+      </md-card>
+      <div flex="20"></div>
     </div>
-  </div>
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="bower_components/velocity/velocity.js"></script>
-  <script src="bower_components/moment/min/moment-with-locales.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/lumx/dist/lumx.js"></script>
+  </md-content>
+  <script src="./bower_components/angular/angular.js"></script>
+  <script src="./bower_components/angular-aria/angular-aria.js"></script>
+  <script src="./bower_components/angular-animate/angular-animate.js"></script>
+  <script src="./bower_components/angular-material/angular-material.js"></script>
+
   <script src="./app.js"></script>
 </body>
 

@@ -6,14 +6,6 @@ var sabreDevStudio = new SabreDevStudio({
   uri:           'https://api.test.sabre.com'
 });
 var options = {};
-var callback = function(error, data) {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log(JSON.stringify(JSON.parse(data)));
-  }
-};
-
 
 module.exports = function(app) {
   app.get('/api/v1/themes', function(req,res) {
