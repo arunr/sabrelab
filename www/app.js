@@ -96,8 +96,9 @@ controller('MainCtrl', function($rootScope, $scope, $http, $timeout, $q, $log) {
   };
 
   $scope.submit = function() {
-    console.log($scope.info);
-    console.log($scope.ctrl);
+    $scope.error = null;
+    $scope.fareinfo = null;
+
     $http.get('/api/v1/places?origin=' + $scope.ctrl.selectedItem.value +
       '&departuredate=' + formatDate($scope.info.departuredate) +
       '&returndate=' + formatDate($scope.info.returndate) +
